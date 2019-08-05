@@ -1,0 +1,58 @@
+# EditorConfig: http://EditorConfig.org
+
+# top-most EditorConfig file
+root = true
+
+###########################################################
+; common
+###########################################################
+
+[*]
+charset = utf-8
+end_of_line = LF
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = space
+indent_size = 2
+
+###########################################################
+; make
+###########################################################
+
+[Makefile]
+indent_style = tab
+
+[makefile]
+indent_style = tab
+
+###########################################################
+; markdown / asciidoc
+###########################################################
+
+[*.{md,markdown,asciidoc,adoc}]
+indent_size = 2
+trim_trailing_whitespace = false
+
+###########################################################
+; yaml
+###########################################################
+
+[*.{yaml,yml,raml}]
+indent_size = 2
+trim_trailing_whitespace = false
+
+###########################################################
+; xml
+###########################################################
+
+[*.{xml,xsd}]
+indent_style = tab
+indent_size = 4
+
+###########################################################
+; golang
+###########################################################
+
+[*.go]
+indent_style = tab
+
