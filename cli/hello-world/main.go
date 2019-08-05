@@ -14,7 +14,7 @@
 
 package main
 
-import "github.com/scraly/hello-world/cmd"
+import "github.com/scraly/hello-world/cli/hello-world/cmd"
 
 func main() {
 	cmd.Execute()

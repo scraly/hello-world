@@ -1,4 +1,4 @@
-module github.com.scraly/hello-world
+module github.com/scraly/hello-world
 
 go 1.12
 

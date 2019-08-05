@@ -1,4 +1,4 @@
-module code.int.be.continental.cloud/ehorizon/services.tinyeh.map/tools
+module github.com/scraly/hello-world/tools
 
 go 1.12
 
