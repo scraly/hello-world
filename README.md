@@ -24,12 +24,35 @@ $ make license
 $ make dev
 ```
 
+- Generate configuration
+```
+bin/hello-world config new > helloworld.local.conf.toml
+```
+
 ## How to 
 
-1. `go run mage.go`
-2. `bin/hello-world --help`
-3. 
+### Complete build (and lint, tests ...)
+
+`go run mage.go`
+
+### Help
+
+`bin/hello-world --help`
+
+1. 
  ```
  bin/hello-world say hello
  hello world !
  ```
+
+### Run client gRPC and call greeter service
+
+```
+$ bin/hello-world client greeter sayHello -s 127.0.0.1:5555 <<< '{}'
+{
+  "entity": {
+    "version": "1"
+  },
+  "error": null
+}%
+```

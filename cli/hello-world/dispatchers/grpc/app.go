@@ -5,13 +5,13 @@ package grpc
 // 	"fmt"
 // 	"sync"
 
-// 	"github.com/scraly/hello-world/internal/services/pkg/v1/db"
+// 	// "github.com/scraly/hello-world/internal/services/pkg/v1"
 
 // 	"go.uber.org/zap"
 // 	"go.zenithar.org/pkg/log"
 // 	"google.golang.org/grpc"
 
-// 	"github.com/scraly/hello-world/cli/schema/internal/config"
+// 	"github.com/scraly/hello-world/cli/hello-world/config"
 // )
 
 // type application struct {

@@ -1,9 +1,10 @@
 package cmd
 
-// TODO: fix
-// helloworld "github.com/scraly/hello-world/pkg/protocol/helloworld"
+import (
+	helloworld "github.com/scraly/hello-world/pkg/protocol/helloworld/v1"
 
-import "github.com/spf13/cobra"
+	"github.com/spf13/cobra"
+)
 
 // -----------------------------------------------------------------------------
 
@@ -15,6 +16,6 @@ var clientCmd = &cobra.Command{
 
 func init() {
 	clientCmd.AddCommand(
-	// helloworld.DbAPIClientCommand,
+		helloworld.GreeterClientCommand,
 	)
 }

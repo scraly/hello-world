@@ -17,13 +17,21 @@ package cmd
 import (
 	"fmt"
 	"os"
+	"strings"
 
-	homedir "github.com/mitchellh/go-homedir"
+	defaults "github.com/mcuadros/go-defaults"
+	"github.com/scraly/hello-world/cli/hello-world/config"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	"go.uber.org/zap"
+	"go.zenithar.org/pkg/flags"
+	"go.zenithar.org/pkg/log"
 )
 
-var cfgFile string
+var (
+	cfgFile string
+	conf    = &config.Configuration{}
+)
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
@@ -35,9 +43,6 @@ examples and usage of using your application. For example:
 Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
-	// Uncomment the following line if your bare application
-	// has an action associated with it:
-	//	Run: func(cmd *cobra.Command, args []string) { },
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
@@ -60,30 +65,60 @@ func init() {
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
 	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+
+	rootCmd.AddCommand(configCmd)
+	rootCmd.AddCommand(clientCmd)
+	rootCmd.AddCommand(startCmd)
+	rootCmd.AddCommand(sayCmd)
 }
 
 // initConfig reads in config file and ENV variables if set.
-func initConfig() {
-	if cfgFile != "" {
-		// Use config file from the flag.
-		viper.SetConfigFile(cfgFile)
-	} else {
-		// Find home directory.
-		home, err := homedir.Dir()
-		if err != nil {
-			fmt.Println(err)
-			os.Exit(1)
-		}
+// func initConfig() {
+// 	if cfgFile != "" {
+// 		// Use config file from the flag.
+// 		viper.SetConfigFile(cfgFile)
+// 	} else {
+// 		// Find home directory.
+// 		home, err := homedir.Dir()
+// 		if err != nil {
+// 			fmt.Println(err)
+// 			os.Exit(1)
+// 		}
 
-		// Search config in home directory with name ".hello-world" (without extension).
-		viper.AddConfigPath(home)
-		viper.SetConfigName(".hello-world")
+// 		// Search config in home directory with name ".hello-world" (without extension).
+// 		viper.AddConfigPath(home)
+// 		viper.SetConfigName(".hello-world")
+// 	}
+
+// 	viper.AutomaticEnv() // read in environment variables that match
+
+// 	// If a config file is found, read it in.
+// 	if err := viper.ReadInConfig(); err == nil {
+// 		fmt.Println("Using config file:", viper.ConfigFileUsed())
+// 	}
+// }
+func initConfig() {
+	for k := range flags.AsEnvVariables(conf, "", false) {
+		log.CheckErr("Unable to bind environment variable", viper.BindEnv(strings.ToLower(strings.Replace(k, "_", ".", -1)), "SCHEMA_"+k), zap.String("var", "SCHEMA_"+k))
 	}
 
-	viper.AutomaticEnv() // read in environment variables that match
+	switch {
+	case cfgFile != "":
+		// If the config file doesn't exists, let's exit
+		if _, err := os.Stat(cfgFile); os.IsNotExist(err) {
+			log.Bg().Fatal("File doesn't exists", zap.Error(err))
+		}
+		fmt.Println("Reading configuration file", cfgFile)
 
-	// If a config file is found, read it in.
-	if err := viper.ReadInConfig(); err == nil {
-		fmt.Println("Using config file:", viper.ConfigFileUsed())
+		viper.SetConfigFile(cfgFile)
+		if err := viper.ReadInConfig(); err != nil {
+			log.Bg().Fatal("Unable to read config", zap.Error(err))
+		}
+	default:
+		defaults.SetDefaults(conf)
+	}
+
+	if err := viper.Unmarshal(conf); err != nil {
+		log.Bg().Fatal("Unable to parse config", zap.Error(err))
 	}
 }
