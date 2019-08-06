@@ -4,14 +4,9 @@ Hello World is a simple CLI application written in Golang with Cobra
 
 ## Global info
 
-- Makefile help
-```
-$ make help
-```
-
 - Download and install tools used by make
 ```
-$ make get.tools
+$ go run mage.go -d tools
 ```
 
 - Download the dependences locked
@@ -31,7 +26,7 @@ $ make dev
 
 ## How to 
 
-1. `make build`
+1. `go run mage.go`
 2. `bin/hello-world --help`
 3. 
  ```

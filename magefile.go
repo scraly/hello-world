@@ -69,19 +69,33 @@ func Build() {
 
 type Gen mg.Namespace
 
-// Generate swagger files
-// func (Gen) Swagger() {
-// 	color.Blue("### Generate swagger files")
-
-// 	mustGoGenerate("Swagger", "github.com/scraly/hello-world/internal/app/swagger")
-// 	mustGoGenerate("Swagger", "github.com/scraly/hello-world/pkg/swagger")
-// }
-
 // Generate mocks for tests
 func (Gen) Mocks() {
 	color.Blue("### Mocks")
 
 	mustGoGenerate("Mocks", "github.com/scraly/hello-world/internal/app")
+}
+
+// Generate protobuf
+func (Gen) Protobuf() error {
+	color.Blue("### Protobuf")
+	mg.SerialDeps(Prototool.Lint)
+
+	return sh.RunV("prototool", "generate")
+}
+
+// -----------------------------------------------------------------------------
+
+type Prototool mg.Namespace
+
+func (Prototool) Lint() error {
+	fmt.Println("#### Lint protobuf")
+	return sh.RunV("prototool", "lint")
+}
+
+func (Prototool) Format() error {
+	fmt.Println("#### Format protobuf")
+	return sh.RunV("prototool", "format")
 }
 
 // -----------------------------------------------------------------------------
@@ -91,7 +105,8 @@ type Go mg.Namespace
 // Generate go code
 func (Go) Generate() error {
 	color.Cyan("## Generate code")
-	// mg.SerialDeps(Gen.Mocks)
+	// mg.SerialDeps(Gen.Protobuf, Gen.Mocks)
+	mg.SerialDeps(Gen.Protobuf)
 	return nil
 }
 
