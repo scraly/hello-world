@@ -67,36 +67,10 @@ func init() {
 	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 
 	rootCmd.AddCommand(configCmd)
+	rootCmd.AddCommand(serverCmd)
 	rootCmd.AddCommand(clientCmd)
-	rootCmd.AddCommand(startCmd)
-	rootCmd.AddCommand(sayCmd)
 }
 
-// initConfig reads in config file and ENV variables if set.
-// func initConfig() {
-// 	if cfgFile != "" {
-// 		// Use config file from the flag.
-// 		viper.SetConfigFile(cfgFile)
-// 	} else {
-// 		// Find home directory.
-// 		home, err := homedir.Dir()
-// 		if err != nil {
-// 			fmt.Println(err)
-// 			os.Exit(1)
-// 		}
-
-// 		// Search config in home directory with name ".hello-world" (without extension).
-// 		viper.AddConfigPath(home)
-// 		viper.SetConfigName(".hello-world")
-// 	}
-
-// 	viper.AutomaticEnv() // read in environment variables that match
-
-// 	// If a config file is found, read it in.
-// 	if err := viper.ReadInConfig(); err == nil {
-// 		fmt.Println("Using config file:", viper.ConfigFileUsed())
-// 	}
-// }
 func initConfig() {
 	for k := range flags.AsEnvVariables(conf, "", false) {
 		log.CheckErr("Unable to bind environment variable", viper.BindEnv(strings.ToLower(strings.Replace(k, "_", ".", -1)), "SCHEMA_"+k), zap.String("var", "SCHEMA_"+k))

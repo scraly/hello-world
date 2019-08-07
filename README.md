@@ -1,6 +1,10 @@
 # Hello World
 
-Hello World is a simple CLI application written in Golang with Cobra
+Hello World is a simple CLI application written in Golang with Cobra.
+
+## Pre-requisits
+
+Install Go in 1.12 version minimum.
 
 ## Global info
 
@@ -11,17 +15,12 @@ $ go run mage.go -d tools
 
 - Download the dependences locked
 ```
-$ make depend.vendor
-```
-
-- Check the licenses
-```
-$ make license
+$ go run mage.go go:deps
 ```
 
 - Release the dev actions
 ```
-$ make dev
+$ go run mage.go
 ```
 
 - Generate configuration
@@ -39,20 +38,33 @@ bin/hello-world config new > helloworld.local.conf.toml
 
 `bin/hello-world --help`
 
-1. 
- ```
- bin/hello-world say hello
- hello world !
- ```
+### Run the app
 
-### Run client gRPC and call greeter service
+***Arguments***
+
+The hello-world app need some parameters :
+
+|                 ARG					 | Pattern			       | Description														    |
+|:--------------------------------------:|:-----------------------:|------------------------------------------------------------------------|
+| help		                             | 		                   | application help			|
+| \-\-config							 | start --config path/to/file            | path to the config file											            |
+| config new		                     | 		                   | generate a new config			|
+| client		                             | 		                   | query the gRPC server			|
+| server		                             | 		                   | gRPC serverwith  services		|
+| \-\-feature-gates		                     | key=value		                   | activate or deactivate a feature			|
+
+
+#### Run gRPC server
 
 ```
-$ bin/hello-world client greeter sayHello -s 127.0.0.1:5555 <<< '{}'
+$ bin/hello-world server grpc
+```
+
+#### Run gRPC client and call Greeter service
+
+```
+$ bin/hello-world client greeter sayHello -s 127.0.0.1:5555 <<< '{"name": "me"}'
 {
-  "entity": {
-    "version": "1"
-  },
-  "error": null
+  "message": "hello me"
 }%
 ```

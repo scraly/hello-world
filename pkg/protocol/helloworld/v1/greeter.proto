@@ -25,4 +25,10 @@ message HelloRequest {
 // The response message containing the greetings
 message HelloReply {
   string message = 1;
+  // Error error = 2;
 }
+
+// Error is a public error description.
+// message Error {
+//   int32 code = 1;
+// }
