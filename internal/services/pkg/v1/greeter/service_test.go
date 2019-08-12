@@ -14,7 +14,6 @@ import (
 )
 
 func TestSayHello(t *testing.T) {
-
 	testCases := []struct {
 		name        string
 		req         *helloworldv1.HelloRequest
@@ -49,7 +48,7 @@ func TestSayHello(t *testing.T) {
 			defer ctrl.Finish()
 			ctx := context.Background()
 
-			//call
+			// call
 			greeterSvc := greeter.New()
 			response, err := greeterSvc.SayHello(ctx, testCase.req)
 
@@ -62,7 +61,6 @@ func TestSayHello(t *testing.T) {
 			} else {
 				g.Expect(response.Message).To(Equal(testCase.message))
 			}
-
 		})
 	}
 }

@@ -6,10 +6,11 @@ package mock
 
 import (
 	context "context"
+	reflect "reflect"
+
 	gomock "github.com/golang/mock/gomock"
 	v1 "github.com/scraly/hello-world/pkg/protocol/helloworld/v1"
 	grpc "google.golang.org/grpc"
-	reflect "reflect"
 )
 
 // MockGreeterClient is a mock of GreeterClient interface
