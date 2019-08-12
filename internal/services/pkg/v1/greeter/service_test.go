@@ -6,11 +6,8 @@ import (
 
 	. "github.com/onsi/gomega"
 
-	"github.com/golang/mock/gomock"
-
-	helloworldv1 "github.com/scraly/hello-world/pkg/protocol/helloworld/v1"
-
 	"github.com/scraly/hello-world/internal/services/pkg/v1/greeter"
+	helloworldv1 "github.com/scraly/hello-world/pkg/protocol/helloworld/v1"
 )
 
 func TestSayHello(t *testing.T) {
@@ -44,8 +41,6 @@ func TestSayHello(t *testing.T) {
 			t.Parallel()
 			g := NewGomegaWithT(t)
 
-			ctrl := gomock.NewController(t)
-			defer ctrl.Finish()
 			ctx := context.Background()
 
 			// call

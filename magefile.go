@@ -118,7 +118,7 @@ func (Go) Test() error {
 // AnalyzeCoverage calculates a single coverage percentage
 func (Go) AnalyzeCoverage() error {
 	color.Cyan("## Analyze tests coverage")
-	return sh.RunV("go-agg-cov", "-coverFile", "test-results/cover.out", "-businessLogicFile", "businesslogic.txt", "-minCoverageThreshold", "50")
+	return sh.RunV("go-agg-cov", "-coverFile", "test-results/cover.out", "-minCoverageThreshold", "90")
 }
 
 // Test run go test

@@ -9,7 +9,6 @@ require (
 	github.com/common-nighthawk/go-figure v0.0.0-20190529165535-67e0ed34491a
 	github.com/fatih/color v1.7.0
 	github.com/gogo/protobuf v1.2.1
-	github.com/golang/mock v1.3.1
 	github.com/golang/protobuf v1.3.1
 	github.com/grpc-ecosystem/go-grpc-middleware v1.0.0
 	github.com/hokaccha/go-prettyjson v0.0.0-20180920040306-f579f869bbfe
