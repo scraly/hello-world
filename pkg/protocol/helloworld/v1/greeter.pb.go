@@ -6,10 +6,9 @@ package helloworldv1
 import (
 	context "context"
 	fmt "fmt"
-	math "math"
-
 	proto "github.com/gogo/protobuf/proto"
 	grpc "google.golang.org/grpc"
+	math "math"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -37,23 +36,18 @@ func (*HelloRequest) ProtoMessage()    {}
 func (*HelloRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_e979900db711f7bc, []int{0}
 }
-
 func (m *HelloRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_HelloRequest.Unmarshal(m, b)
 }
-
 func (m *HelloRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_HelloRequest.Marshal(b, m, deterministic)
 }
-
 func (m *HelloRequest) XXX_Merge(src proto.Message) {
 	xxx_messageInfo_HelloRequest.Merge(m, src)
 }
-
 func (m *HelloRequest) XXX_Size() int {
 	return xxx_messageInfo_HelloRequest.Size(m)
 }
-
 func (m *HelloRequest) XXX_DiscardUnknown() {
 	xxx_messageInfo_HelloRequest.DiscardUnknown(m)
 }
@@ -81,23 +75,18 @@ func (*HelloReply) ProtoMessage()    {}
 func (*HelloReply) Descriptor() ([]byte, []int) {
 	return fileDescriptor_e979900db711f7bc, []int{1}
 }
-
 func (m *HelloReply) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_HelloReply.Unmarshal(m, b)
 }
-
 func (m *HelloReply) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_HelloReply.Marshal(b, m, deterministic)
 }
-
 func (m *HelloReply) XXX_Merge(src proto.Message) {
 	xxx_messageInfo_HelloReply.Merge(m, src)
 }
-
 func (m *HelloReply) XXX_Size() int {
 	return xxx_messageInfo_HelloReply.Size(m)
 }
-
 func (m *HelloReply) XXX_DiscardUnknown() {
 	xxx_messageInfo_HelloReply.DiscardUnknown(m)
 }

@@ -52,7 +52,6 @@ func Build() {
 	fmt.Printf("Go version : %s\n", runtime.Version())
 	fmt.Printf("Git revision : %s\n", hash())
 	fmt.Printf("Git branch : %s\n", branch())
-	// TODO: replace version with tag()
 	fmt.Printf("Tag : %s\n", version)
 
 	fmt.Println("")
@@ -73,7 +72,7 @@ type Gen mg.Namespace
 func (Gen) Mocks() {
 	color.Blue("### Mocks")
 
-	mustGoGenerate("Mocks", "github.com/scraly/hello-world/internal/app")
+	mustGoGenerate("Mocks", "github.com/scraly/hello-world/internal/services/pkg/v1")
 }
 
 // Generate protobuf
@@ -105,8 +104,7 @@ type Go mg.Namespace
 // Generate go code
 func (Go) Generate() error {
 	color.Cyan("## Generate code")
-	// mg.SerialDeps(Gen.Protobuf, Gen.Mocks)
-	mg.SerialDeps(Gen.Protobuf)
+	mg.SerialDeps(Gen.Protobuf, Gen.Mocks)
 	return nil
 }
 
