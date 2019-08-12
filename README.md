@@ -28,6 +28,11 @@ $ go run mage.go
 bin/hello-world config new > helloworld.local.conf.toml
 ```
 
+- Execute unit test and display code coverage:
+```
+$ go run mage.go go:test go:analyzecoverage
+``` 
+
 ## How to 
 
 ### Complete build (and lint, tests ...)
