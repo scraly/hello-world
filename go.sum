@@ -2,14 +2,6 @@ cloud.google.com/go v0.26.0/go.mod h1:aQUYkXzVsufM+DwF1aE+0xfcU+56JwCaLick0ClmMT
 cloud.google.com/go v0.34.0/go.mod h1:aQUYkXzVsufM+DwF1aE+0xfcU+56JwCaLick0ClmMTw=
 cloud.google.com/go v0.38.0 h1:ROfEUZz+Gh5pa62DJWXSaonyu3StP6EA6lPEXPI6mCo=
 cloud.google.com/go v0.38.0/go.mod h1:990N+gfupTy94rShfmMCWGDn0LpTmnzTp2qbd1dvSRU=
-code.int.be.continental.cloud/ehorizon/infra.golang.common v0.0.0-20190214160621-565f1bca0aed/go.mod h1:pI3GoXVLQCyNfE/S4JsZskWazENStSx5vx6iUSzf0PA=
-code.int.be.continental.cloud/ehorizon/services.core.license v0.0.2/go.mod h1:SByHucb5OkpWq10+3EvBZXBZjWHxS05WskfwV7xMjH8=
-code.int.be.continental.cloud/ehorizon/services.nds.buildingblock v0.0.0-20190806085946-a0c135484b9f h1:+hvdC30Wf/e9QlOhrAh3gzT1jgRss3zLBG56qSkX9II=
-code.int.be.continental.cloud/ehorizon/services.nds.buildingblock v0.0.0-20190806085946-a0c135484b9f/go.mod h1:2KhPj091LK7wsW85WySXNxVSZozEnKc+AQglzq6QQWo=
-code.int.be.continental.cloud/ehorizon/services.nds.schema v0.0.4 h1:LcATC/JBYQklRNFWTeuFgPrL6GmHutQkxrteYwXLaGM=
-code.int.be.continental.cloud/ehorizon/services.nds.schema v0.0.4/go.mod h1:lHXPFlyrEBXi9kW3dlvYEkbEbyJO71uHwKerT53Mw8U=
-code.int.be.continental.cloud/ehorizon/services.tinyeh.map-catalog v0.0.0-20190808150247-1a28973a1f86 h1:WpAG7EAl/gmW2k3PiwjUq0ylKSDbMxbRH8Z1VNOsMqM=
-code.int.be.continental.cloud/ehorizon/services.tinyeh.map-catalog v0.0.0-20190808150247-1a28973a1f86/go.mod h1:AytXssAH6G2VwsMBWFKEfFEGzGoa3Q7oJsLzIG3xpic=
 contrib.go.opencensus.io/exporter/jaeger v0.1.0 h1:WNc9HbA38xEQmsI40Tjd/MNU/g8byN2Of7lwIjv0Jdc=
 contrib.go.opencensus.io/exporter/jaeger v0.1.0/go.mod h1:VYianECmuFPwU37O699Vc1GOcy+y8kOsfaxHRImmjbA=
 contrib.go.opencensus.io/exporter/ocagent v0.5.0 h1:TKXjQSRS0/cCDrP7KvkgU6SmILtF/yV2TOs/02K/WZQ=
