@@ -3,7 +3,6 @@ module github.com/scraly/hello-world
 go 1.12
 
 require (
-	code.int.be.continental.cloud/ehorizon/services.tinyeh.map-catalog v0.0.0-20190808150247-1a28973a1f86 // indirect
 	github.com/bxcodec/faker v2.0.1+incompatible
 	github.com/cloudflare/tableflip v0.0.0-20190521150731-8ccd7b4aff9e
 	github.com/common-nighthawk/go-figure v0.0.0-20190529165535-67e0ed34491a
