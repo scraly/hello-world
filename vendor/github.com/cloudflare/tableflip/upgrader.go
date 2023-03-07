@@ -2,14 +2,16 @@ package tableflip
 
 import (
 	"context"
+	"errors"
+	"fmt"
 	"io/ioutil"
+	"net"
 	"os"
 	"path/filepath"
+	"runtime"
 	"strconv"
 	"sync"
 	"time"
-
-	"github.com/pkg/errors"
 )
 
 // DefaultUpgradeTimeout is the duration before the Upgrader kills the new process if no
@@ -23,6 +25,8 @@ type Options struct {
 	UpgradeTimeout time.Duration
 	// The PID of a ready process is written to this file.
 	PIDFile string
+	// ListenConfig is a custom ListenConfig. Defaults to an empty ListenConfig
+	ListenConfig *net.ListenConfig
 }
 
 // Upgrader handles zero downtime upgrades and passing files between processes.
@@ -47,12 +51,18 @@ var (
 	stdEnvUpgrader *Upgrader
 )
 
+var ErrNotSupported = errors.New("tableflip: platform does not support graceful restart")
+
 // New creates a new Upgrader. Files are passed from the parent and may be empty.
 //
-// Only the first call to this function will succeed.
+// Only the first call to this function will succeed. May return ErrNotSupported.
 func New(opts Options) (upg *Upgrader, err error) {
 	stdEnvMu.Lock()
 	defer stdEnvMu.Unlock()
+
+	if !isSupportedOS() {
+		return nil, fmt.Errorf("%w", ErrNotSupported)
+	}
 
 	if stdEnvUpgrader != nil {
 		return nil, errors.New("tableflip: only a single Upgrader allowed")
@@ -89,7 +99,7 @@ func newUpgrader(env *env, opts Options) (*Upgrader, error) {
 		upgradeC:  make(chan chan<- error),
 		exitC:     make(chan struct{}),
 		exitFd:    make(chan neverCloseThisFile, 1),
-		Fds:       newFds(files),
+		Fds:       newFds(files, opts.ListenConfig),
 	}
 
 	go u.run()
@@ -109,7 +119,7 @@ func (u *Upgrader) Ready() error {
 
 	if u.opts.PIDFile != "" {
 		if err := writePIDFile(u.opts.PIDFile); err != nil {
-			return errors.Wrap(err, "tableflip: can't write PID file")
+			return fmt.Errorf("tableflip: can't write PID file: %s", err)
 		}
 	}
 
@@ -237,7 +247,7 @@ func (u *Upgrader) run() {
 func (u *Upgrader) doUpgrade() (*os.File, error) {
 	child, err := startChild(u.env, u.Fds.copy())
 	if err != nil {
-		return nil, errors.Wrap(err, "can't start child")
+		return nil, fmt.Errorf("can't start child: %s", err)
 	}
 
 	readyTimeout := time.After(u.opts.UpgradeTimeout)
@@ -248,9 +258,9 @@ func (u *Upgrader) doUpgrade() (*os.File, error) {
 
 		case err := <-child.result:
 			if err == nil {
-				return nil, errors.Errorf("child %s exited", child)
+				return nil, fmt.Errorf("child %s exited", child)
 			}
-			return nil, errors.Wrapf(err, "child %s exited", child)
+			return nil, fmt.Errorf("child %s exited: %s", child, err)
 
 		case <-u.stopC:
 			child.Kill()
@@ -258,7 +268,7 @@ func (u *Upgrader) doUpgrade() (*os.File, error) {
 
 		case <-readyTimeout:
 			child.Kill()
-			return nil, errors.Errorf("new child %s timed out", child)
+			return nil, fmt.Errorf("new child %s timed out", child)
 
 		case file := <-child.ready:
 			return file, nil
@@ -302,4 +312,11 @@ func writePIDFile(path string) error {
 	}
 
 	return os.Rename(fh.Name(), path)
+}
+
+// Check if this is a supported OS.
+// That is currently all Unix-like OS's.
+// At the moment, we assume that is everything except Windows.
+func isSupportedOS() bool {
+	return runtime.GOOS != "windows"
 }
