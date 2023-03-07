@@ -4,8 +4,6 @@ import (
 	"encoding/gob"
 	"fmt"
 	"os"
-
-	"github.com/pkg/errors"
 )
 
 type child struct {
@@ -22,14 +20,14 @@ func startChild(env *env, passedFiles map[fileName]*file) (*child, error) {
 	// readyW is passed to the child, readyR stays with the parent
 	readyR, readyW, err := os.Pipe()
 	if err != nil {
-		return nil, errors.Wrap(err, "pipe failed")
+		return nil, fmt.Errorf("pipe failed: %s", err)
 	}
 
 	namesR, namesW, err := os.Pipe()
 	if err != nil {
 		readyR.Close()
 		readyW.Close()
-		return nil, errors.Wrap(err, "pipe failed")
+		return nil, fmt.Errorf("pipe failed: %s", err)
 	}
 
 	// Copy passed fds and append the notification pipe
@@ -43,9 +41,14 @@ func startChild(env *env, passedFiles map[fileName]*file) (*child, error) {
 	}
 
 	// Copy environment and append the notification env vars
-	environ := append([]string(nil), env.environ()...)
-	environ = append(environ,
-		fmt.Sprintf("%s=yes", sentinelEnvVar))
+	sentinel := fmt.Sprintf("%s=yes", sentinelEnvVar)
+	var environ []string
+	for _, val := range env.environ() {
+		if val != sentinel {
+			environ = append(environ, val)
+		}
+	}
+	environ = append(environ, sentinel)
 
 	proc, err := env.newProc(os.Args[0], os.Args[1:], fds, environ)
 	if err != nil {
@@ -53,7 +56,7 @@ func startChild(env *env, passedFiles map[fileName]*file) (*child, error) {
 		readyW.Close()
 		namesR.Close()
 		namesW.Close()
-		return nil, errors.Wrapf(err, "can't start process %s", os.Args[0])
+		return nil, fmt.Errorf("can't start process %s: %s", os.Args[0], err)
 	}
 
 	exited := make(chan struct{})

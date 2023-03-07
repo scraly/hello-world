@@ -16,47 +16,49 @@ has the following goals:
 * Crashing during initialisation is OK
 * Only a single upgrade is ever run in parallel
 
-`tableflip` does not work on Windows.
+**`tableflip` works on Linux and macOS.**
 
-It's easy to get started:
+## Using the library
 
 ```Go
-upg, err := tableflip.New(tableflip.Options{})
-if err != nil {
-	panic(err)
-}
+upg, _ := tableflip.New(tableflip.Options{})
 defer upg.Stop()
 
 go func() {
 	sig := make(chan os.Signal, 1)
 	signal.Notify(sig, syscall.SIGHUP)
 	for range sig {
-		err := upg.Upgrade()
-		if err != nil {
-			log.Println("Upgrade failed:", err)
-			continue
-		}
-
-		log.Println("Upgrade succeeded")
+		upg.Upgrade()
 	}
 }()
 
-ln, err := upg.Fds.Listen("tcp", "localhost:8080")
-if err != nil {
-	log.Fatalln("Can't listen:", err)
-}
+// Listen must be called before Ready
+ln, _ := upg.Listen("tcp", "localhost:8080")
+defer ln.Close()
 
-var server http.Server
-go server.Serve(ln)
+go http.Serve(ln, nil)
 
 if err := upg.Ready(); err != nil {
 	panic(err)
 }
+
 <-upg.Exit()
-
-time.AfterFunc(30*time.Second, func() {
-	os.Exit(1)
-})
-
-_ = server.Shutdown(context.Background())
 ```
+
+Please see the more elaborate [graceful shutdown with net/http](http_example_test.go) example.
+
+## Integration with `systemd`
+
+```
+[Unit]
+Description=Service using tableflip
+
+[Service]
+ExecStart=/path/to/binary -some-flag /path/to/pid-file
+ExecReload=/bin/kill -HUP $MAINPID
+PIDFile=/path/to/pid-file
+```
+
+See the [documentation](https://godoc.org/github.com/cloudflare/tableflip) as well.
+
+The logs of a process using `tableflip` may go missing due to a [bug in journald](https://github.com/systemd/systemd/issues/13708). You can work around this by logging directly to journald, for example by using [go-systemd/journal](https://godoc.org/github.com/coreos/go-systemd/journal) and looking for the [$JOURNAL_STREAM](https://www.freedesktop.org/software/systemd/man/systemd.exec.html#$JOURNAL_STREAM) environment variable.
